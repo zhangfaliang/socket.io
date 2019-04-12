@@ -9,7 +9,8 @@
     "pro": "webpack --config webpack.prod.js  && node ./server/server.js",    
     "dev": "webpack  webpack.dev.js && node ./server/server.js",
     "watch": "webpack --watch",
-    "build": "webpack --config webpack.prod.js"
+    "build": "webpack --config webpack.prod.js",
+    "server": "node ./server/server.js"
 
   },
   "repository": {
