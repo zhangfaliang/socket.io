@@ -1,7 +1,7 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CleanWebpackPlugin = require("clean-webpack-plugin");
-const contentBase = "./server/public";
+const ASSET_PATH = "/static";
 const webpack = require("webpack");
 
 module.exports = {
@@ -17,13 +17,7 @@ module.exports = {
       root: "_"
     }
   },
-  output: {
-    filename: "[name].[chunkhash].js",
-    chunkFilename: "[name].bundle.js",
-    path: path.resolve(contentBase),
-    library: "socket",
-    libraryTarget: "umd"
-  },
+
   module: {
     rules: [
       {
@@ -43,8 +37,13 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      title: "Code Splitting"
+      title: "Code Splitting",
+      template: path.join(__dirname, "/server/index.ejs"),
+      inject:false
     }),
- 
+
+    new webpack.DefinePlugin({
+      "process.env.ASSET_PATH": JSON.stringify(ASSET_PATH)
+    })
   ]
 };
