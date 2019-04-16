@@ -28,6 +28,7 @@ let timer = 1000,
   timers = null;
 const initSocket = (server, initProp = {}) => {
   io.attach(server, {
+    path: '/myownpath',
     pingInterval: 10000,
     pingTimeout: 5000,
     cookie: false,

@@ -1,8 +1,9 @@
 import io from "socket.io-client";
 import parser from "socket.io-msgpack-parser";
 
-const socket = io({
+const socket = io('http://localhost:3000/',{
   // parser,
+  path: '/myownpath',
   query: {
     token: "cde" // 参数携带
   },
