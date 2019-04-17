@@ -3,7 +3,8 @@ const common = require("./webpack.common.js");
 const webpack = require("webpack");
 const contentBase = "./server/asset/public";
 const path = require("path");
-
+console.log('NODE_ENV: ', env.NODE_ENV) // 'local'
+console.log('Production: ', env.production) // true
 module.exports = merge(common, {
   devtool: "inline-source-map",
   devServer: {
