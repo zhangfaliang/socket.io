@@ -1,7 +1,7 @@
 import io from "socket.io-client";
 import parser from "socket.io-msgpack-parser";
 
-const socket = io('http://localhost:3000/',{
+const socket = io('https://localhost:3000/',{
   // parser,
   path: '/myownpath',
   query: {
