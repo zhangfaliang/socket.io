@@ -1,12 +1,13 @@
 import { socket }  from "./utils/socket";
-import "./utils/polyfills.js";
-
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker
-      .register("/sw.js")
+      .register("static/service-worker.js")
       .then(registration => {
         console.log("SW registered: ", registration);
+        window.addEventListener('activate', function(e) {
+          console.log('[ServiceWorker] Activate');
+        });
       })
       .catch(registrationError => {
         console.log("SW registration failed: ", registrationError);
