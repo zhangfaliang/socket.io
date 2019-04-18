@@ -1,5 +1,8 @@
 const webpush = require("web-push");
-const dataScurce = []
+const dataSource = []
+const options = {
+  proxy: 'http://localhost:1087' // 使用FCM（Chrome）需要配置代理
+};
 // console.log( webpush.generateVAPIDKeys())
 const vapidKeys = {
   publicKey:
@@ -33,7 +36,7 @@ function pushMessage(subscription, data = {}) {
 const pushRouter = ({ app }) => {
   app.post("/subscription", function(req, res, next) {
   
-    dataScurce.push(req.body);
+    dataSource.push(req.body);
     
   });
 
@@ -47,12 +50,11 @@ const pushRouter = ({ app }) => {
       }
       //badge: '/html/app-manifest/logo_512.png'
     };
-    console.log(dataScurce, "=111111111");
-    if (dataScurce) {
-      for (let i = 0; i < dataScurce; i++) {
-        let subscription = dataScurce[i].subscription;
+    if (dataSource) {
+      for (let i = 0; i < dataSource.length; i++) {
+        let subscription = dataSource[i].subscription;
         pushMessage(subscription, JSON.stringify(payload));
-        console.log(dataScurce, "next  -------push");
+        console.log(dataSource, "next  -------push");
       }
     }
 
