@@ -58,11 +58,22 @@ module.exports = {
     new webpack.DefinePlugin({
       "process.env.ASSET_PATH": JSON.stringify(ASSET_PATH)
     }),
-    new WorkboxPlugin.GenerateSW({
+    // new WorkboxPlugin.GenerateSW({
+    //   swDest: "sw.js",
+    //   clientsClaim: true,
+    //   skipWaiting: true,
+    //   runtimeCaching: [
+    //     {
+    //       urlPattern: new RegExp("https://localhost:3000/static"),
+    //       handler: "StaleWhileRevalidate"
+    //     }
+    //   ]
+    // }),
+    new WorkboxPlugin.InjectManifest({
       // 这些选项帮助 ServiceWorkers 快速启用
       // 不允许遗留任何“旧的” ServiceWorkers
-      clientsClaim: true,
-      // skipWaiting: true
+      swSrc: "./web/src/utils/sw.js",
+      swDest: "sw.js"
     })
   ]
 };

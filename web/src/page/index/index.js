@@ -15,6 +15,7 @@ const initPage = () => {
     elementM.innerText = "";
     return false;
   });
+
 };
 
 export default initPage

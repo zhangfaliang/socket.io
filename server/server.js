@@ -39,14 +39,12 @@ var options = {
   cert: fs.readFileSync(path.resolve("server/ssl/server.crt"))
 };
 app.use("/static", express.static(__dirname + "/asset/public"));
-
-// app.get("/service-worker.js", function(req, res) {
-//   res.sendFile(__dirname + "/asset/public/service-worker.js");
-//   console.log('2222222')
-// });
-// app.get(/precache\-manifest\.\w+\.js/, function(req, res) {
-//   res.sendFile(__dirname + "/asset/public/precache-manifest.acda653e4206490985eba13325283049.js");
-// });
+app.get(/\w+\.html/, function(req, res,next) {
+  res.sendFile(__dirname + "/asset/public/index.html");
+});
+app.get(/\w+\.js$/, function(req, res) {
+  res.sendFile(__dirname + "/asset/public"+req.originalUrl);
+});
 app.get("/", function(req, res) {
   res.sendFile(__dirname + "/asset/public/index.html");
 });

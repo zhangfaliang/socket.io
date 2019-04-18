@@ -1,13 +1,21 @@
-import { socket }  from "./utils/socket";
+import { socket } from "./utils/socket";
+import "./page/index";
+
+const publicKey = new Uint8Array([0x4, 0x37, 0x77, 0xfe]);
+
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker
-      .register("static/service-worker.js")
+      .register("sw.js")
       .then(registration => {
         console.log("SW registered: ", registration);
-        window.addEventListener('activate', function(e) {
-          console.log('[ServiceWorker] Activate');
-        });
+        // try {
+        //   registration.pushManager.subscribe({
+        //     userVisibleOnly: true,
+        //   });
+        // } catch (error) {
+        //   console.log(error, "errorerrorerrorerror");
+        // }
       })
       .catch(registrationError => {
         console.log("SW registration failed: ", registrationError);
