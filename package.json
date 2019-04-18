@@ -25,6 +25,7 @@
   "dependencies": {
     "@babel/polyfill": "^7.4.3",
     "babel-polyfill": "^6.26.0",
+    "body-parser": "^1.18.3",
     "clean-webpack-plugin": "^2.0.1",
     "css-loader": "^2.1.1",
     "express": "^4.16.4",
@@ -38,6 +39,8 @@
     "style-loader": "^0.23.1",
     "ts-loader": "^5.3.3",
     "typescript": "^3.4.3",
+    "urlb64touint8array": "^1.0.3",
+    "web-push": "^3.3.3",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0",
     "webpack-dev-middleware": "^3.6.2",

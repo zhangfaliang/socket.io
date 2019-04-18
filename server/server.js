@@ -3,23 +3,17 @@ var fs = require("fs");
 var app = express();
 var https = require("https");
 var path = require("path");
+var bodyParser = require('body-parser')
 var { initSocket } = require("./socketIoServer.js");
 var { initRouter } = require("./routes/index.js");
 var options = {
   key: fs.readFileSync(path.resolve("server/ssl/server.key")),
   cert: fs.readFileSync(path.resolve("server/ssl/server.crt"))
 };
-initRouter({ app, express,serverDirname:__dirname });
-// app.get(/\w+\.html/, function(req, res,next) {
-//   res.sendFile(__dirname + "/asset/public/index.html");
-// });
-// app.get(/\w+\.js$/, function(req, res) {
-//   res.sendFile(__dirname + "/asset/public"+req.originalUrl);
-// });
-// app.get("/", function(req, res) {
-//   res.sendFile(__dirname + "/asset/public/index.html");
-// });
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
+initRouter({ app, express, serverDirname: __dirname });
 var server = https.createServer(options, app);
 initSocket(server);
 

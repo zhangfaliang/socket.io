@@ -60,6 +60,8 @@ module.exports = {
     }),
     // new WorkboxPlugin.GenerateSW({
     //   swDest: "sw.js",
+    // 这些选项帮助 ServiceWorkers 快速启用
+    // 不允许遗留任何“旧的” ServiceWorkers
     //   clientsClaim: true,
     //   skipWaiting: true,
     //   runtimeCaching: [
@@ -68,10 +70,8 @@ module.exports = {
     //       handler: "StaleWhileRevalidate"
     //     }
     //   ]
-    // }),
+    // })
     new WorkboxPlugin.InjectManifest({
-      // 这些选项帮助 ServiceWorkers 快速启用
-      // 不允许遗留任何“旧的” ServiceWorkers
       swSrc: "./web/src/utils/sw.js",
       swDest: "sw.js"
     })

@@ -1,4 +1,3 @@
-
 workbox.core.skipWaiting();
 workbox.core.clientsClaim();
 
@@ -13,8 +12,10 @@ self.addEventListener('push', (event) => {
   const options = {
     body: event.data.text()
   };
+  console.log( event.data.text(),' event.data.text()')
   event.waitUntil(self.registration.showNotification(title, options));
 });
+
 
 
 workbox.precaching.precacheAndRoute(self.__precacheManifest);

@@ -48,7 +48,7 @@ const initSocket = (server, initProp = {}) => {
     let token = socket.handshake.query.token;
     let clientId = socket.handshake.headers["x-clientid"];
 
-    console.log(token, clientId);
+    // console.log(token, clientId);
     return next();
     // return next(new Error('authentication error'));
   });

@@ -1,50 +1,47 @@
 import { socket } from "./utils/socket";
-import "./page/index";
+import toUint8Array from "urlb64touint8array";
+import initPage from "./page/index";
+import { subscriptionData } from "./services/push";
+initPage(socket);
 
-const publicKey = new Uint8Array([0x4, 0x37, 0x77, 0xfe]);
-
+const publicKey =
+  "BCbUy06NAVcRdIofq0n5vio_6bIJ6YGrMIOXnUT_JCFVWYUROB_U6uv1tHXyA_Nonvk3cXOp2JA2Z_wBQjxSLgg";
+function subscribeUserToPush(registration, publicKey) {
+  var subscribeOptions = {
+    userVisibleOnly: true,
+    applicationServerKey: toUint8Array(publicKey)
+  };
+  return registration.pushManager
+    .subscribe(subscribeOptions)
+    .then(function(pushSubscription) {
+      console.log(
+        "Received PushSubscription: ",
+        JSON.stringify(pushSubscription)
+      );
+      return pushSubscription;
+    });
+}
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker
       .register("sw.js")
       .then(registration => {
         console.log("SW registered: ", registration);
-        // try {
-        //   registration.pushManager.subscribe({
-        //     userVisibleOnly: true,
-        //   });
-        // } catch (error) {
-        //   console.log(error, "errorerrorerrorerror");
-        // }
+        return subscribeUserToPush(registration, publicKey);
+      })
+      .then(function(subscription) {
+        var body = { subscription: subscription };
+        // 为了方便之后的推送，为每个客户端简单生成一个标识
+        body.uniqueid = new Date().getTime();
+        console.log("uniqueid", body.uniqueid);
+        // 将生成的客户端订阅信息存储在自己的服务器上
+        return subscriptionData(body);
+      })
+      .then(function(res) {
+        console.log(res);
       })
       .catch(registrationError => {
         console.log("SW registration failed: ", registrationError);
       });
   });
 }
-
-socket.on("chat message", function(msg) {
-  const element = document.getElementById("messages");
-  const elementLi = document.createElement("li");
-  elementLi.innerHTML = msg;
-  element.append(elementLi);
-  console.log("messages");
-});
-const elementSend = document.getElementById("Send");
-
-elementSend.onclick = e => {
-  e.preventDefault(); // prevents page reloading
-  const elementM = document.getElementById("m");
-  console.log(elementM.innerText, socket);
-  socket.emit("chat message", elementM.value);
-  elementM.value = "";
-  return false;
-};
-//在重新连接时，重置transports选项，作为Websocket
-//连接可能失败（由代理，防火墙，浏览器......引起）
-socket.on("reconnect_attempt", () => {
-  (socket.io.opts.query = {
-    token: "reconnect_attempt"
-  }),
-    (socket.io.opts.transports = ["polling", "websocket"]);
-});
