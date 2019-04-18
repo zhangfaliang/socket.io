@@ -1,30 +1,25 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/Cellar/yarn/1.15.2/libexec/bin/yarn.js add body-parser --save
+  /usr/local/bin/node /Users/shinyred/.yarn/bin/yarn.js
 
 PATH: 
-  /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+  /Users/shinyred/.yarn/bin:/Users/shinyred/.config/yarn/global/node_modules/.bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
 
 Yarn version: 
   1.15.2
 
 Node version: 
-  8.10.0
+  10.13.0
 
 Platform: 
   darwin x64
 
 Trace: 
-  Error: https://registry.npmjs.org/web-push: tunneling socket could not be established, cause=connect ECONNREFUSED 127.0.0.1:1087
-      at ClientRequest.onError (/usr/local/Cellar/yarn/1.15.2/libexec/lib/cli.js:141027:17)
-      at Object.onceWrapper (events.js:315:30)
-      at emitOne (events.js:116:13)
-      at ClientRequest.emit (events.js:211:7)
-      at Socket.socketErrorListener (_http_client.js:387:9)
-      at emitOne (events.js:116:13)
-      at Socket.emit (events.js:211:7)
-      at emitErrorNT (internal/streams/destroy.js:64:8)
-      at _combinedTickCallback (internal/process/next_tick.js:138:11)
-      at process._tickCallback (internal/process/next_tick.js:180:9)
+  Error: https://registry.yarnpkg.com/web-push: ETIMEDOUT
+      at Timeout._onTimeout (/Users/shinyred/.yarn/lib/cli.js:130201:19)
+      at ontimeout (timers.js:436:11)
+      at tryOnTimeout (timers.js:300:5)
+      at listOnTimeout (timers.js:263:5)
+      at Timer.processTimers (timers.js:223:10)
 
 npm manifest: 
   {
@@ -54,6 +49,7 @@ npm manifest:
     "dependencies": {
       "@babel/polyfill": "^7.4.3",
       "babel-polyfill": "^6.26.0",
+      "body-parser": "^1.18.3",
       "clean-webpack-plugin": "^2.0.1",
       "css-loader": "^2.1.1",
       "express": "^4.16.4",
