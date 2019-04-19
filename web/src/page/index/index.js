@@ -8,16 +8,14 @@ const initPage = socket => {
     element.append(elementLi);
     console.log("messages");
   });
-  debugger;
   const elementSend = document.getElementById("Send");
-
   elementSend.onclick = e => {
     e.preventDefault(); // prevents page reloading
-    // const elementM = document.getElementById("m");
+    const elementM = document.getElementById("m");
     // console.log(elementM.innerText, socket);
     // socket.emit("chat message", elementM.value);
     // elementM.value = "";
-    pushData();
+    pushData({uniqueid:elementM.value});
     return false;
   };
   //在重新连接时，重置transports选项，作为Websocket

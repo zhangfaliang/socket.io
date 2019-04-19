@@ -1,7 +1,7 @@
 const webpush = require("web-push");
 const dataSource = []
 const options = {
-  proxy: 'http://localhost:1087' // 使用FCM（Chrome）需要配置代理
+  proxy: 'https://localhost:1087' // 使用FCM（Chrome）需要配置代理
 };
 // console.log( webpush.generateVAPIDKeys())
 const vapidKeys = {
@@ -27,7 +27,7 @@ function pushMessage(subscription, data = {}) {
       if (err.statusCode === 410 || err.statusCode === 404) {
         // return util.remove(subscription);
       } else {
-        console.log(subscription);
+        // console.log(subscription);
         console.log(err);
       }
     });
@@ -35,12 +35,11 @@ function pushMessage(subscription, data = {}) {
 
 const pushRouter = ({ app }) => {
   app.post("/subscription", function(req, res, next) {
-  
     dataSource.push(req.body);
-    
+    res.send(JSON.stringify({message:'ok'}));
   });
 
-  app.post("/push", function(req, res, next) {
+  app.post("/pushData", function(req, res, next) {
     const payload = {
       title: "一篇新的文章",
       body: "点开看看吧",
@@ -51,14 +50,17 @@ const pushRouter = ({ app }) => {
       //badge: '/html/app-manifest/logo_512.png'
     };
     if (dataSource) {
+     console.log(req.body.uniqueid);
+
+     // let list = uniqueid ? await util.find({uniqueid}) : await util.findAll();
+
       for (let i = 0; i < dataSource.length; i++) {
         let subscription = dataSource[i].subscription;
         pushMessage(subscription, JSON.stringify(payload));
-        console.log(dataSource, "next  -------push");
+       // console.log(dataSource, "next  -------push");
       }
     }
-
-    next();
+    res.send(JSON.stringify({message:'ok'}));
   });
 };
 
