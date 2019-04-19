@@ -2,6 +2,8 @@ import { socket } from "./utils/socket";
 import toUint8Array from "urlb64touint8array";
 import initPage from "./page/index";
 import { subscriptionData } from "./services/push";
+
+
 initPage(socket);
 
 const publicKey =
@@ -23,6 +25,12 @@ function subscribeUserToPush(registration, publicKey) {
 }
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
+    const LinkEle = document.createElement('link');
+    console.dir(LinkEle)
+    // LinkEle.href = json;
+    // LinkEle.rel = "stylesheet";
+    // document.head.appendChild(LinkEle)
+
     navigator.serviceWorker
       .register("sw.js")
       .then(registration => {

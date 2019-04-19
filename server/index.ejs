@@ -52,14 +52,15 @@
     </style>
     <title><%= htmlWebpackPlugin.options.title %></title>
     <% for (var css in htmlWebpackPlugin.files.css) { %>
-    <link href="<%=htmlWebpackPlugin.files.css[css] %>" rel="stylesheet">
+    <link href="static/<%=htmlWebpackPlugin.files.css[css] %>" rel="stylesheet">
     <% } %>
+    <link href="static/manifest.json" rel="manifest">
 </head>
 
 <body>
     <div id="app"></div>
     <ul id="messages"></ul>
-    <form  id='form' action="">
+    <form id='form' action="">
         <input id="m" autocomplete="off" /><button id='Send'>Send</button>
     </form>
     <% for (var chunk in htmlWebpackPlugin.files.chunks) { %>

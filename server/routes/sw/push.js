@@ -1,8 +1,10 @@
 const webpush = require("web-push");
-const dataSource = []
-const options = {
-  proxy: 'https://localhost:1087' // 使用FCM（Chrome）需要配置代理
-};
+const { get, isArray } = require("lodash");
+const dataSource = [];
+const urlParse = require("url").parse;
+const proxyOptions = urlParse("http://127.0.0.1:1080");
+proxyOptions.rejectUnauthorized = false;
+
 // console.log( webpush.generateVAPIDKeys())
 const vapidKeys = {
   publicKey:
@@ -10,14 +12,15 @@ const vapidKeys = {
   privateKey: "3ApzKIw09LKuzYl07JEuXn4c9ZU1jFLuN9IBbCmmPTQ"
 };
 webpush.setVapidDetails(
-  "mailto:985324428@qq.com",
+  "mailto:alienzhou16@163.com",
   vapidKeys.publicKey,
   vapidKeys.privateKey
 );
 
 function pushMessage(subscription, data = {}) {
+  console.log(subscription, data, "strart------------------push",{proxy:"http://127.0.0.1:1080"});
   webpush
-    .sendNotification(subscription, data, options)
+    .sendNotification(subscription, data, { proxy: "http://127.0.0.1:1080" })
     .then(data => {
       console.log("push service的相应数据:", JSON.stringify(data));
       return;
@@ -36,7 +39,7 @@ function pushMessage(subscription, data = {}) {
 const pushRouter = ({ app }) => {
   app.post("/subscription", function(req, res, next) {
     dataSource.push(req.body);
-    res.send(JSON.stringify({message:'ok'}));
+    res.send(JSON.stringify({ message: "ok" }));
   });
 
   app.post("/pushData", function(req, res, next) {
@@ -50,17 +53,22 @@ const pushRouter = ({ app }) => {
       //badge: '/html/app-manifest/logo_512.png'
     };
     if (dataSource) {
-     console.log(req.body.uniqueid);
-
-     // let list = uniqueid ? await util.find({uniqueid}) : await util.findAll();
-
-      for (let i = 0; i < dataSource.length; i++) {
-        let subscription = dataSource[i].subscription;
+      const uniqueid = get(req, "body.uniqueid", "");
+      let list = uniqueid
+        ? dataSource.find(
+            item => parseInt(get(item, "uniqueid", "")) === parseInt(uniqueid)
+          )
+        : dataSource;
+      list = list || dataSource;
+      if (!isArray(list) && list) list = [list];
+      for (let i = 0; i < list.length; i++) {
+        let subscription = list[i].subscription;
         pushMessage(subscription, JSON.stringify(payload));
-       // console.log(dataSource, "next  -------push");
       }
+      res.send(JSON.stringify({ message: "ok" }));
+    } else {
+      res.send(JSON.stringify({ error: "未推送" }));
     }
-    res.send(JSON.stringify({message:'ok'}));
   });
 };
 
