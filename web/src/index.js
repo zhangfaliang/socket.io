@@ -2,7 +2,7 @@ import { socket } from "./utils/socket";
 import toUint8Array from "urlb64touint8array";
 import initPage from "./page/index";
 import { subscriptionData } from "./services/push";
-
+import "./asset/img/57.png";
 
 initPage(socket);
 
@@ -23,18 +23,45 @@ function subscribeUserToPush(registration, publicKey) {
       return pushSubscription;
     });
 }
+
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
-    const LinkEle = document.createElement('link');
-    console.dir(LinkEle)
-    // LinkEle.href = json;
-    // LinkEle.rel = "stylesheet";
-    // document.head.appendChild(LinkEle)
-
     navigator.serviceWorker
-      .register("sw.js")
+      .register("/sw.js")
       .then(registration => {
         console.log("SW registered: ", registration);
+
+        window.addEventListener("beforeinstallprompt", function(e) {
+          // beforeinstallprompt Event fired
+
+          // e.userChoice will return a Promise.
+          // For more details read: https://developers.google.com/web/fundamentals/getting-started/primers/promises
+          e.userChoice.then(function(choiceResult) {
+            console.log(choiceResult.outcome);
+
+            if (choiceResult.outcome == "dismissed") {
+              console.log("User cancelled home screen install");
+            } else {
+              console.log("User added to home screen");
+            }
+          });
+        });
+        var deferredPrompt;
+        window.addEventListener("beforeinstallprompt", function(e) {
+          console.log("beforeinstallprompt Event fired");
+
+          e.preventDefault();
+          // Stash the event so it can be triggered later.
+          deferredPrompt = e;
+
+          return false;
+        });
+        window.addEventListener("beforeinstallprompt", function(e) {
+          console.log("beforeinstallprompt Event fired");
+          e.preventDefault();
+          return false;
+        });
+
         return subscribeUserToPush(registration, publicKey);
       })
       .then(function(subscription) {

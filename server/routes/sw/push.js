@@ -43,15 +43,18 @@ const pushRouter = ({ app }) => {
   });
 
   app.post("/pushData", function(req, res, next) {
+    
     const payload = {
-      title: "一篇新的文章",
-      body: "点开看看吧",
-      icon: "/html/app-manifest/logo_512.png",
-      data: {
-        url: "http://localhost:7000/horseRace/detail/03/39/Newcastle/6/Win"
-      }
-      //badge: '/html/app-manifest/logo_512.png'
+      "body": "Did you make a $1,000,000 purchase at Dr. Evil...",
+      "icon": "images/ccard.png",
+      "vibrate": [200, 100, 200, 100, 200, 100, 400],
+      "tag": "request",
+      "actions": [
+        { "action": "yes", "title": "Yes", "icon": "images/yes.png" },
+        { "action": "no", "title": "No", "icon": "images/no.png" }
+      ]
     };
+
     if (dataSource) {
       const uniqueid = get(req, "body.uniqueid", "");
       let list = uniqueid

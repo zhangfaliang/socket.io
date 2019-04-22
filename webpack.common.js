@@ -4,8 +4,9 @@ const CleanWebpackPlugin = require("clean-webpack-plugin");
 const ASSET_PATH = "/static";
 const webpack = require("webpack");
 const WorkboxPlugin = require("workbox-webpack-plugin");
-const GenerateJsonPlugin = require('generate-json-webpack-plugin');
-const manifestJSON = require("./manifest.js")
+const GenerateJsonPlugin = require("generate-json-webpack-plugin");
+const manifestJSON = require("./manifest.js");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 module.exports = {
   entry: {
     app: "./web/src/index.js",
@@ -27,12 +28,11 @@ module.exports = {
         include: path.resolve(__dirname, "src"),
         loader: "babel-loader"
       },
-
       {
-        test: /\.json$/,
-        exclude: /node_modules/,
-        use: ["file-loader?name=[name].[ext]&outputPath=/static"]
+        test: /\.(html)$/,
+        loader: "file?name=[path][name].[ext]&context=./server/asset/public"
       },
+
       {
         test: /\.tsx?$/,
         use: "ts-loader",
@@ -55,7 +55,9 @@ module.exports = {
   resolve: {
     extensions: [".tsx", ".ts", ".js"]
   },
+  context: path.join(__dirname, ""),
   plugins: [
+    new CopyWebpackPlugin([{ from: "web/src/asset" }]),
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       title: "Progressive Web Application",
@@ -82,6 +84,6 @@ module.exports = {
       swSrc: "./web/src/utils/sw.js",
       swDest: "sw.js"
     }),
-    new GenerateJsonPlugin('manifest.json', manifestJSON)
+    new GenerateJsonPlugin("manifest.json", manifestJSON)
   ]
 };
