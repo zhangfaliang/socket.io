@@ -22,13 +22,13 @@
 //   wsEngine: ws //使用什么WebSocket服务器实现。指定的模块必须符合ws接口（请参阅ws module api docs）。默认值是ws。通过安装uws模块也可以使用替代的c ++插件。
 // }
 var io = require("socket.io")();
-const parser = require('socket.io-msgpack-parser'); // or require('socket.io-json-parser')
+const parser = require("socket.io-msgpack-parser"); // or require('socket.io-json-parser')
 
 let timer = 1000,
   timers = null;
 const initSocket = (server, initProp = {}) => {
   io.attach(server, {
-    path: '/myownpath',
+  //  path: "/myownpath",
     pingInterval: 10000,
     pingTimeout: 5000,
     cookie: false,
@@ -43,7 +43,7 @@ const initSocket = (server, initProp = {}) => {
   //     return callback(null, true);
   //   });
   // server-side
-  
+
   io.use((socket, next) => {
     let token = socket.handshake.query.token;
     let clientId = socket.handshake.headers["x-clientid"];
@@ -58,18 +58,26 @@ const initSocket = (server, initProp = {}) => {
   io.engine.generateId = req => {
     return "custom:id:" + custom_id++; // custom id must be unique
   };
-  io.on("connection", function(socket) {
+  const dynamicNsp = io.of(/^\/dynamic-\d+$/).on('connect', (socket) => {
+    const newNamespace = socket.nsp; // newNamespace.name === '/dynamic-101'
+
     socket.on("chat message", function(msg) {
-      io.emit("chat message", msg);
+      socket.emit("chat message", msg);
       timers = setInterval(() => {
         timer += 1000;
-        io.emit("chat message", timer);
+        socket.emit("chat message", timer);
         if (timer > 5000) {
           clearInterval(timers);
         }
       }, 1000);
     });
-  });
+
+    socket.on("get font", (data,callback) => {
+      console.log(data);
+      callback('toow')
+    });
+
+  })
 };
 
 module.exports = {

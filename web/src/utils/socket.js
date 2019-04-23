@@ -1,9 +1,9 @@
 import io from "socket.io-client";
-import parser from "socket.io-msgpack-parser";
-
-const socket = io('https://localhost:3000/',{
+// import parser from "socket.io-msgpack-parser";
+const parser = require("socket.io-msgpack-parser"); // or require('socket.io-json-parser')
+const socket = io("https://localhost:3000/dynamic-101", {
   // parser,
-  path: '/myownpath',
+ // path: "/myownpath",
   query: {
     token: "cde" // 参数携带
   },
@@ -14,10 +14,10 @@ const socket = io('https://localhost:3000/',{
       }
     }
   },
- transports: ["websocket"] //传输升级
+  transports: ["websocket"] //传输升级
 });
-
 if (process.env.NODE_ENV !== "production") {
   console.log("Looks like we are in development mode!");
 }
+
 export { socket };
