@@ -43,12 +43,12 @@ const initSocket = (server, initProp = {}) => {
   //     return callback(null, true);
   //   });
   // server-side
-
+  
   io.use((socket, next) => {
     let token = socket.handshake.query.token;
     let clientId = socket.handshake.headers["x-clientid"];
 
-    // console.log(token, clientId);
+    console.log(token, clientId);
     return next();
     // return next(new Error('authentication error'));
   });

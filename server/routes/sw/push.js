@@ -18,7 +18,7 @@ webpush.setVapidDetails(
 );
 
 function pushMessage(subscription, data = {}) {
-  console.log(subscription, data, "strart------------------push",{proxy:"http://127.0.0.1:1080"});
+  // console.log(subscription, data, "strart------------------push",{proxy:"http://127.0.0.1:1080"});
   webpush
     .sendNotification(subscription, data, { proxy: "http://127.0.0.1:1080" })
     .then(data => {

@@ -3,10 +3,12 @@ var fs = require("fs");
 var app = express();
 var https = require("https");
 var path = require("path");
-var bodyParser = require('body-parser')
+var bodyParser = require("body-parser");
 var { initSocket } = require("./socketIoServer.js");
 var { initRouter } = require("./routes/index.js");
 var options = {
+  // key: fs.readFileSync('server-key.pem'),
+  // cert: fs.readFileSync('server-cert.pem')
   key: fs.readFileSync(path.resolve("server/ssl/server.key")),
   cert: fs.readFileSync(path.resolve("server/ssl/server.crt"))
 };
