@@ -23,31 +23,24 @@
 // }
 var io = require("socket.io")();
 const parser = require("socket.io-msgpack-parser"); // or require('socket.io-json-parser')
+const adminSocket = require("./socketNameSpace/admin");
+const newsSocket = require("./socketNameSpace/news");
+const messageSocket = require("./socketNameSpace/message");
+const ferretSocket = require("./socketNameSpace/ferret");
 
-let timer = 1000,
-  timers = null;
+
 const initSocket = (server, initProp = {}) => {
   io.attach(server, {
-  //  path: "/myownpath",
+    //  path: "/myownpath",
     pingInterval: 10000,
     pingTimeout: 5000,
     cookie: false,
     parser: parser
   });
-  //通过其路径名标识符nsp初始化并检索给定的Namespace。如果命名空间已初始化，则立即返回它。
-  //   io.origins((origin, callback) => {
-  //       console.log(origin !== 'http://192.168.0.188:3000/')
-  //     if (origin !== 'http://192.168.0.188:3000/') {
-  //       return callback('origin not allowed', false);
-  //     }
-  //     return callback(null, true);
-  //   });
-  // server-side
 
   io.use((socket, next) => {
     let token = socket.handshake.query.token;
     let clientId = socket.handshake.headers["x-clientid"];
-
     console.log(token, clientId);
     return next();
     // return next(new Error('authentication error'));
@@ -58,26 +51,10 @@ const initSocket = (server, initProp = {}) => {
   io.engine.generateId = req => {
     return "custom:id:" + custom_id++; // custom id must be unique
   };
-  const dynamicNsp = io.of(/^\/dynamic-\d+$/).on('connect', (socket) => {
-    const newNamespace = socket.nsp; // newNamespace.name === '/dynamic-101'
-
-    socket.on("chat message", function(msg) {
-      socket.emit("chat message", msg);
-      timers = setInterval(() => {
-        timer += 1000;
-        socket.emit("chat message", timer);
-        if (timer > 5000) {
-          clearInterval(timers);
-        }
-      }, 1000);
-    });
-
-    socket.on("get font", (data,callback) => {
-      console.log(data);
-      callback('toow')
-    });
-
-  })
+  adminSocket(io);
+  newsSocket(io);
+  messageSocket(io);
+  ferretSocket(io);
 };
 
 module.exports = {
